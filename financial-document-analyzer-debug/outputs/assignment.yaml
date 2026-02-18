@@ -1,0 +1,107 @@
+openapi: 3.0.0
+info:
+  title: Financial Document Analyzer API
+  description: |
+    A comprehensive financial document analysis system that processes corporate reports, 
+    financial statements, and investment documents using AI-powered multi-agent analysis.
+    
+    The system uses 4 specialized AI agents:
+    1. Document Verifier - Validates financial documents
+    2. Financial Analyst - Extracts and analyzes key metrics
+    3. Investment Advisor - Provides investment recommendations
+    4. Risk Assessor - Identifies risk factors and mitigation strategies
+  version: 1.0.0
+  contact:
+    name: Financial Document Analyzer
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+paths:
+  /:
+    get:
+      summary: Health Check
+      operationId: healthCheck
+      description: Check if the API is running
+      tags:
+        - Health
+      responses:
+        '200':
+          description: API is running
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Financial Document Analyzer API is running"
+              example:
+                message: "Financial Document Analyzer API is running"
+  /analyze:
+    post:
+      summary: Analyze Financial Document
+      operationId: analyzeFinancialDocument
+      description: |
+        Upload a financial document (PDF) and get comprehensive AI-powered analysis including:
+        - Financial metrics and trends
+        - Investment recommendations
+        - Risk assessment
+        - Market insights
+      tags:
+        - Analysis
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: PDF financial document to analyze
+                query:
+                  type: string
+                  description: Custom analysis question (optional)
+                  default: "Analyze this financial document for investment insights"
+                  example: "What are the key revenue trends and investment risks?"
+      responses:
+        '200':
+          description: Successful analysis
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  query:
+                    type: string
+                    example: "What are the key revenue trends and investment risks?"
+                  analysis:
+                    type: string
+                    description: Comprehensive analysis from all 4 AI agents
+                  file_processed:
+                    type: string
+                    example: "TSLA-Q2-2025-Update.pdf"
+              example:
+                status: "success"
+                query: "What are the key revenue trends and investment risks?"
+                analysis: "Comprehensive financial analysis including metrics, trends, recommendations, and risk assessment..."
+                file_processed: "TSLA-Q2-2025-Update.pdf"
+        '500':
+          description: Error processing document
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "Error processing financial document: [error message]"
+components:
+  schemas: {}
+  securitySchemes: {}
